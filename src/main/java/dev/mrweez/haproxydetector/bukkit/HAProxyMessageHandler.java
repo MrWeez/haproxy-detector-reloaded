@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector.bukkit;
+package dev.mrweez.haproxydetector.bukkit;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -15,7 +15,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.haproxy.HAProxyMessage;
-import static net.andylizi.haproxydetector.ReflectionUtil.sneakyThrow;
+import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
 @Sharable
 class HAProxyMessageHandler extends SimpleChannelInboundHandler<HAProxyMessage> {

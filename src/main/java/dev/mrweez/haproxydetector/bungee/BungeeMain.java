@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package net.andylizi.haproxydetector.bungee;
+package dev.mrweez.haproxydetector.bungee;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
@@ -34,15 +34,15 @@ import com.google.common.collect.ForwardingSet;
 import io.netty.channel.*;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 import io.netty.util.AttributeKey;
-import net.andylizi.haproxydetector.HAProxyDetectorHandler;
-import net.andylizi.haproxydetector.MetricsId;
-import net.andylizi.haproxydetector.ProxyWhitelist;
+import dev.mrweez.haproxydetector.HAProxyDetectorHandler;
+import dev.mrweez.haproxydetector.MetricsId;
+import dev.mrweez.haproxydetector.ProxyWhitelist;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.bstats.bungeecord.Metrics;
 
-import static net.andylizi.haproxydetector.ReflectionUtil.sneakyThrow;
+import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
 public final class BungeeMain extends Plugin implements Listener {
     static Logger logger;
@@ -126,7 +126,7 @@ public final class BungeeMain extends Plugin implements Listener {
         }
 
         try {
-            Metrics metrics = new Metrics(this, 12605);
+            Metrics metrics = new Metrics(this, 31892);
             metrics.addCustomChart(MetricsId.createWhitelistCountChart());
         } catch (Throwable t) {
             logger.log(Level.WARNING, "Failed to start metrics", t);

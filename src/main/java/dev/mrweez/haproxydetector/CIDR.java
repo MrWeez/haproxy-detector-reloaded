@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector;
+package dev.mrweez.haproxydetector;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.jetbrains.annotations.NotNull;

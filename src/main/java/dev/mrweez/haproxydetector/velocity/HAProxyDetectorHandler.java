@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector.velocity;
+package dev.mrweez.haproxydetector.velocity;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,7 +7,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.ProtocolDetectionResult;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 import io.netty.handler.codec.haproxy.HAProxyProtocolVersion;
-import net.andylizi.haproxydetector.ProxyWhitelist;
+import dev.mrweez.haproxydetector.ProxyWhitelist;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 

@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector.bukkit;
+package dev.mrweez.haproxydetector.bukkit;
 
 public interface InjectionStrategy {
     void inject() throws ReflectiveOperationException;
