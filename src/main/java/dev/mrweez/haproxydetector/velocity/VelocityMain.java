@@ -11,6 +11,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
+import dev.mrweez.haproxydetector.Config;
+import dev.mrweez.haproxydetector.HAProxyDetectorHandler;
 import dev.mrweez.haproxydetector.MetricsId;
 import dev.mrweez.haproxydetector.ProxyWhitelist;
 import dev.mrweez.haproxydetector.ReflectionUtil;
@@ -48,6 +50,8 @@ public final class VelocityMain {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws ReflectiveOperationException, IOException {
+        Config.load(this.dataDirectory.resolve("config.yml"));
+
         if (!isProxyEnabled()) {
             logger.error("!!! ==============================");
             logger.error("!!! Proxy protocol is not enabled,");
@@ -145,7 +149,7 @@ public final class VelocityMain {
 
             try {
                 HAProxyMessageDecoder decoder = pipeline.get(HAProxyMessageDecoder.class);
-                pipeline.replace(decoder, "haproxy-detector", new HAProxyDetectorHandler(logger));
+                pipeline.replace(decoder, "haproxy-detector", new HAProxyDetectorHandler(logger, null));
             } catch (NoSuchElementException | NullPointerException e) {
                 throw new RuntimeException("HAProxy support is not enabled", e);
             }

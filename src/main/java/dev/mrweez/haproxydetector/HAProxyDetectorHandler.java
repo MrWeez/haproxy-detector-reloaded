@@ -32,16 +32,28 @@ import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 import io.netty.handler.codec.haproxy.HAProxyProtocolVersion;
 
 public class HAProxyDetectorHandler extends ByteToMessageDecoder {
-    private final Logger logger;
+    private final Object logger;
     private final ChannelHandler haproxyHandler;
 
     {
         setSingleDecode(true);
     }
 
-    public HAProxyDetectorHandler(Logger logger, ChannelHandler haproxyHandler) {
+    public HAProxyDetectorHandler(Object logger, ChannelHandler haproxyHandler) {
         this.logger = logger;
         this.haproxyHandler = haproxyHandler;
+    }
+
+    private void logWarning(String message) {
+        if (logger instanceof Logger) {
+            Config.getInstance().log((Logger) logger, Level.WARNING, message);
+        } else if (logger instanceof org.slf4j.Logger) {
+            if (Config.getInstance().isLogToSeparateFile()) {
+                Config.getInstance().log(null, Level.WARNING, message);
+            } else {
+                ((org.slf4j.Logger) logger).warn(message);
+            }
+        }
     }
 
     @Override
@@ -59,7 +71,9 @@ public class HAProxyDetectorHandler extends ByteToMessageDecoder {
                     SocketAddress addr = ctx.channel().remoteAddress();
                     if (!ProxyWhitelist.check(addr)) {
                         try {
-                            ProxyWhitelist.getWarningFor(addr).ifPresent(logger::info);
+                            if (Config.getInstance().isLogInvalidProxy()) {
+                                ProxyWhitelist.getWarningFor(addr).ifPresent(this::logWarning);
+                            }
                         } finally {
                             ctx.close();
                         }
@@ -91,8 +105,10 @@ public class HAProxyDetectorHandler extends ByteToMessageDecoder {
                     break;
             }
         }  catch (Throwable t) {  // stop BC from eating my exceptions
-            if (logger != null)
-                logger.log(Level.WARNING, "Exception while detecting proxy", t);
+            if (logger instanceof Logger)
+                ((Logger) logger).log(Level.WARNING, "Exception while detecting proxy", t);
+            else if (logger instanceof org.slf4j.Logger)
+                ((org.slf4j.Logger) logger).warn("Exception while detecting proxy", t);
             else 
                 t.printStackTrace();
         }
