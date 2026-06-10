@@ -28,10 +28,10 @@ import java.util.NoSuchElementException;
 
 import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
-@Plugin(id = "haproxy-detector-reloaded", name = "HAProxyDetector Reloaded", version = "1.0.0-SNAPSHOT",
+@Plugin(id = "haproxy-detector-reloaded", name = "HAProxyDetector Reloaded", version = "1.0.0",
     url = "https://github.com/mrweez/haproxy-detector-reloaded",
     description = "Enables proxied and direct connections both at the same time.",
-    authors = {"mrweez"})
+    authors = {"andylizi", "mrweez"})
 public final class VelocityMain {
     private final ProxyServer server;
     private final Logger logger;

@@ -1,5 +1,5 @@
 name: HAProxyDetector-Reloaded
 main: dev.mrweez.haproxydetector.bungee.BungeeMain
 version: ${project.version}
-author: mrweez
+author: andylizi, mrweez
 softdepends: [BungeeProxy]
