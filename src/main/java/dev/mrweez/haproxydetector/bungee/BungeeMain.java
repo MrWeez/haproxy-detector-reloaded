@@ -34,6 +34,7 @@ import com.google.common.collect.ForwardingSet;
 import io.netty.channel.*;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 import io.netty.util.AttributeKey;
+import dev.mrweez.haproxydetector.Config;
 import dev.mrweez.haproxydetector.HAProxyDetectorHandler;
 import dev.mrweez.haproxydetector.MetricsId;
 import dev.mrweez.haproxydetector.ProxyWhitelist;
@@ -78,6 +79,9 @@ public final class BungeeMain extends Plugin implements Listener {
     @SuppressWarnings("unchecked")
     public void onEnable() {
         try {
+            Path configPath = this.getDataFolder().toPath().resolve("config.yml");
+            Config.load(configPath);
+
             Path path = this.getDataFolder().toPath().resolve("whitelist.conf");
             ProxyWhitelist whitelist = ProxyWhitelist.loadOrDefault(path).orElse(null);
             if (whitelist == null) {

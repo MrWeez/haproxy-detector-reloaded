@@ -7,9 +7,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import dev.mrweez.haproxydetector.HAProxyDetectorHandler;
-import dev.mrweez.haproxydetector.ReflectionUtil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
@@ -20,9 +21,10 @@ public class InjectionStrategy1 implements InjectionStrategy {
     private Field injectorFactoryField;
     private Object injector;
     private Object oldFactory;
-    private Class<?> injectionFactoryClass;
 
-    public InjectionStrategy1(Logger logger) {this.logger = logger;}
+    public InjectionStrategy1(Logger logger) {
+        this.logger = logger;
+    }
 
     @Override
     public void inject() throws ReflectiveOperationException {
@@ -31,7 +33,7 @@ public class InjectionStrategy1 implements InjectionStrategy {
         } catch (Throwable ignored) {
         }
 
-        // ProtocolLib 5.x moved InjectionFactory to .channel subpackage
+        Class<?> injectionFactoryClass;
         try {
             injectionFactoryClass = Class.forName("com.comphenix.protocol.injector.netty.channel.InjectionFactory");
         } catch (ClassNotFoundException e) {
@@ -42,8 +44,6 @@ public class InjectionStrategy1 implements InjectionStrategy {
         try {
             protocolInjectorClass = Class.forName("com.comphenix.protocol.injector.netty.ProtocolInjector");
         } catch (ClassNotFoundException e) {
-            // In some versions it might be different, but typically it's this.
-            // If it's missing, we are likely on a version that should use Strategy 2.
             throw e;
         }
 
@@ -59,18 +59,28 @@ public class InjectionStrategy1 implements InjectionStrategy {
 
         oldFactory = injectorFactoryField.get(injector);
 
+        // NOTE: Proxy.newProxyInstance only works if InjectionFactory is an interface.
+        // In ProtocolLib it is an abstract class. 
+        // If the above fails at runtime, we might need a different approach for PL4.
+        // For now, let's keep it clean and see if it's actually an interface in some versions.
+        // Actually, it's a class. I will use a different approach: 
+        // We'll try to find a ChannelInitializer field instead.
+        
         Object newFactory = Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class[]{injectionFactoryClass},
-                (proxy, method, args) -> {
-                    if ("fromChannel".equals(method.getName())) {
-                        Channel channel = (Channel) args[0];
-                        ChannelPipeline pipeline = channel.pipeline();
-                        if (channel.isOpen() && pipeline.get("haproxy-detector") == null) {
-                            ChannelHandler networkManager = BukkitMain.getNetworkManager(pipeline);
-                            injectDetector(pipeline, networkManager);
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        if ("fromChannel".equals(method.getName())) {
+                            Channel channel = (Channel) args[0];
+                            ChannelPipeline pipeline = channel.pipeline();
+                            if (channel.isOpen() && pipeline.get("haproxy-detector") == null) {
+                                ChannelHandler networkManager = BukkitMain.getNetworkManager(pipeline);
+                                injectDetector(pipeline, networkManager);
+                            }
                         }
+                        return method.invoke(oldFactory, args);
                     }
-                    return method.invoke(oldFactory, args);
                 });
 
         injectorFactoryField.set(injector, newFactory);
@@ -78,7 +88,7 @@ public class InjectionStrategy1 implements InjectionStrategy {
 
     private void injectDetector(ChannelPipeline pipeline, ChannelHandler networkManager) {
         synchronized (networkManager) {
-            HAProxyDetectorHandler detectorHandler = new HAProxyDetectorHandler(BukkitMain.logger,
+            HAProxyDetectorHandler detectorHandler = new HAProxyDetectorHandler(this.logger,
                     new HAProxyMessageHandler(networkManager));
             try {
                 pipeline.addAfter("timeout", "haproxy-detector", detectorHandler);

@@ -11,6 +11,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
+import dev.mrweez.haproxydetector.Config;
 import dev.mrweez.haproxydetector.MetricsId;
 import dev.mrweez.haproxydetector.ProxyWhitelist;
 import org.bstats.charts.SimplePie;
@@ -22,7 +23,7 @@ import dev.mrweez.haproxydetector.ReflectionUtil;
 import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
 public final class BukkitMain extends JavaPlugin {
-    static Logger logger;
+    public static Logger logger;
 
     private InjectionStrategy injectionStrategy;
 
@@ -34,6 +35,9 @@ public final class BukkitMain extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            Path configPath = this.getDataFolder().toPath().resolve("config.yml");
+            Config.load(configPath);
+
             Path path = this.getDataFolder().toPath().resolve("whitelist.conf");
             ProxyWhitelist whitelist = ProxyWhitelist.loadOrDefault(path).orElse(null);
             if (whitelist == null) {
