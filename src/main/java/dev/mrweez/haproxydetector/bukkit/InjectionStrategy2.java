@@ -1,10 +1,10 @@
-package net.andylizi.haproxydetector.bukkit;
+package dev.mrweez.haproxydetector.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.reflect.FuzzyReflection;
 import io.netty.channel.*;
-import net.andylizi.haproxydetector.HAProxyDetectorHandler;
+import dev.mrweez.haproxydetector.HAProxyDetectorHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;

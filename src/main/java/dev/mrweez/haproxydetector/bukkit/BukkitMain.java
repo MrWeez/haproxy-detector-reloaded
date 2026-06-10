@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector.bukkit;
+package dev.mrweez.haproxydetector.bukkit;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,15 +11,15 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
-import net.andylizi.haproxydetector.MetricsId;
-import net.andylizi.haproxydetector.ProxyWhitelist;
+import dev.mrweez.haproxydetector.MetricsId;
+import dev.mrweez.haproxydetector.ProxyWhitelist;
 import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bstats.bukkit.Metrics;
 
-import net.andylizi.haproxydetector.ReflectionUtil;
+import dev.mrweez.haproxydetector.ReflectionUtil;
 
-import static net.andylizi.haproxydetector.ReflectionUtil.sneakyThrow;
+import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
 public final class BukkitMain extends JavaPlugin {
     static Logger logger;
@@ -74,7 +74,7 @@ public final class BukkitMain extends JavaPlugin {
         }
 
         try {
-            Metrics metrics = new Metrics(this, 12604);
+            Metrics metrics = new Metrics(this, 31890);
             metrics.addCustomChart(MetricsId.createWhitelistCountChart());
             metrics.addCustomChart(new SimplePie(MetricsId.KEY_PROTOCOLLIB_VERSION,
                     () -> ProtocolLibrary.getPlugin().getDescription().getVersion()));

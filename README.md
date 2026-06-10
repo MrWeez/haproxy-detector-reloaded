@@ -1,11 +1,9 @@
-# HAProxyDetector
+# HAProxyDetector Reloaded
 
-[![](https://img.shields.io/github/downloads/andylizi/haproxy-detector/total?style=for-the-badge)](https://github.com/andylizi/haproxy-detector/releases) [![](https://img.shields.io/github/license/andylizi/haproxy-detector?style=for-the-badge)](https://github.com/andylizi/haproxy-detector/blob/master/LICENSE) [![](https://img.shields.io/bstats/servers/12604?label=Spigot%20Servers&style=for-the-badge)](https://bstats.org/plugin/bukkit/HAProxyDetector/12604) [![](https://img.shields.io/bstats/servers/12605?label=BC%20Servers&style=for-the-badge)](https://bstats.org/plugin/bungeecord/HAProxyDetector/12605) [![](https://img.shields.io/bstats/servers/14442?label=Velocity%20Servers&style=for-the-badge)](https://bstats.org/plugin/velocity/HAProxyDetector/14442)
+[![](https://img.shields.io/github/downloads/mrweez/haproxy-detector-reloaded/total?style=for-the-badge)](https://github.com/mrweez/haproxy-detector-reloaded/releases) [![](https://img.shields.io/github/license/mrweez/haproxy-detector-reloaded?style=for-the-badge)](https://github.com/mrweez/haproxy-detector-reloaded/blob/master/LICENSE) [![](https://img.shields.io/bstats/servers/31890?label=Spigot%20Servers&style=for-the-badge)](https://bstats.org/plugin/bukkit/HAProxyDetector%20Reloaded/31890) [![](https://img.shields.io/bstats/servers/31892?label=BC%20Servers&style=for-the-badge)](https://bstats.org/plugin/bungeecord/HAProxyDetector%20Reloaded/31892) [![](https://img.shields.io/bstats/servers/31894?label=Velocity%20Servers&style=for-the-badge)](https://bstats.org/plugin/velocity/HAProxyDetector%20Reloaded/31894)
 
 This [BungeeCord](https://github.com/SpigotMC/BungeeCord/) (and now [Spigot](https://www.spigotmc.org/wiki/spigot/)
-and [Velocity](https://velocitypowered.com/)) plugin enables proxied and direct connections both at the same time. More
-infomation about [HAProxy](https://www.haproxy.org/) and its uses can be
-found [here](https://github.com/MinelinkNetwork/BungeeProxy/blob/master/README.md).
+and [Velocity](https://velocitypowered.com/)) plugin enables proxied and direct connections both at the same time.
 
 ## Security Warning
 
@@ -46,40 +44,20 @@ YesIReallyWantToDisableWhitelistItsExtremelyDangerousButIKnowWhatIAmDoing!!!
 
 #### BungeeCord
 
-`proxy_protocol` needs to be enabled in BC `config.yml` for this plugin to work. (Not to be confused with the similar option in `paper.yml`)
-
-Older versions of BC can in theory use [BungeeProxy](https://github.com/MinelinkNetwork/BungeeProxy) in parallel
-with this plugin, but it hasn't been tested yet. Feedback is welcomed.
-
-#### Spigot and its derivatives
-
-[ProtocolLib](https://github.com/dmulloy2/ProtocolLib) is a required dependency.
-This plugin was developed using ProtocolLib v4.8.0; please try that version first if there are any errors. Check out [issue #3](https://github.com/andylizi/haproxy-detector/issues/3) for experimental support for ProtocolLib 5.0.
-
-#### Paper
-
-New versions of Paper have built-in HAProxy support (proxied connection only). It's not compatible with this plugin, so please disable the `proxy-protocol` option in `paper.yml`.
+`proxy_protocol` needs to be enabled in BC `config.yml` for this plugin to work.
 
 #### Velocity
 
 `haproxy-protocol` needs to be enabled in Velocity config for this plugin to work.
 
-Versions older than 3.0 are not supported.
+#### Spigot and its derivatives
 
-#### Java >= 9
+[ProtocolLib](https://github.com/dmulloy2/ProtocolLib) is a required dependency.
+This version of the plugin supports both ProtocolLib 4.x and 5.x.
 
-If errors like `NoClassDefFoundError: sun.misc.Unsafe`, `InaccessibleObjectException` and such are encountered,
-please add `--add-opens java.base/java.lang.invoke=ALL-UNNAMED` to JVM arguments.
+#### Paper
 
-#### Java >= 18
-
-If errors like `IllegalAccessException: static final field has no write access` are encountered,
-please upgrade the plugin to at least v3.0.2.
-
-If you cannot upgrade for whatever reason, a temporary workaround would be to add
-`-Djdk.reflect.useDirectMethodHandle=false` to JVM arguments.
-
-Note that this argument will be removed in future Java releases.
+New versions of Paper have built-in HAProxy support (proxied connection only). It's not compatible with this plugin, so please disable the `proxy-protocol` option in `/config/paper-global.yml` (or `paper.yml` for older paper versions).
 
 ## Metrics
 

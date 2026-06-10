@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector;
+package dev.mrweez.haproxydetector;
 
 import org.bstats.charts.CustomChart;
 import org.bstats.charts.SimplePie;

@@ -1,7 +1,7 @@
-name: HAProxyDetector
-main: net.andylizi.haproxydetector.bukkit.BukkitMain
+name: HAProxyDetector-Reloaded
+main: dev.mrweez.haproxydetector.bukkit.BukkitMain
 version: ${project.version}
-author: andylizi
+author: andylizi, mrweez
 load: STARTUP
 depend: [ProtocolLib]
 # This plugin is universal and should support every Minecraft version.

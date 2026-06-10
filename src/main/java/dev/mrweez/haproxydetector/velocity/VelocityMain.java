@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector.velocity;
+package dev.mrweez.haproxydetector.velocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -11,9 +11,9 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
-import net.andylizi.haproxydetector.MetricsId;
-import net.andylizi.haproxydetector.ProxyWhitelist;
-import net.andylizi.haproxydetector.ReflectionUtil;
+import dev.mrweez.haproxydetector.MetricsId;
+import dev.mrweez.haproxydetector.ProxyWhitelist;
+import dev.mrweez.haproxydetector.ReflectionUtil;
 import org.bstats.velocity.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -26,12 +26,12 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
-import static net.andylizi.haproxydetector.ReflectionUtil.sneakyThrow;
+import static dev.mrweez.haproxydetector.ReflectionUtil.sneakyThrow;
 
-@Plugin(id = "haproxy-detector", name = "HAProxyDetector", version = "3.1.0-SNAPSHOT",
-    url = "https://github.com/andylizi/haproxy-detector",
+@Plugin(id = "haproxy-detector-reloaded", name = "HAProxyDetector Reloaded", version = "1.0.0",
+    url = "https://github.com/mrweez/haproxy-detector-reloaded",
     description = "Enables proxied and direct connections both at the same time.",
-    authors = {"andylizi"})
+    authors = {"andylizi", "mrweez"})
 public final class VelocityMain {
     private final ProxyServer server;
     private final Logger logger;
@@ -69,7 +69,7 @@ public final class VelocityMain {
         inject();
 
         try {
-            Metrics metrics = metricsFactory.make(this, 14442);
+            Metrics metrics = metricsFactory.make(this, 31894);
             metrics.addCustomChart(MetricsId.createWhitelistCountChart());
         } catch (Throwable t) {
             logger.warn("Failed to start metrics", t);

@@ -1,4 +1,4 @@
-package net.andylizi.haproxydetector;
+package dev.mrweez.haproxydetector;
 
 import org.junit.jupiter.api.Test;
 
