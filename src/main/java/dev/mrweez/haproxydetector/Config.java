@@ -3,6 +3,8 @@ package dev.mrweez.haproxydetector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -12,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 public class Config {
@@ -33,9 +36,9 @@ public class Config {
             try (InputStream in = Files.newInputStream(path)) {
                 Map<String, Object> data = yaml.load(in);
                 if (data != null) {
-                    config.logSuccessfulProxy = (boolean) data.getOrDefault("log-successful-proxy", true);
-                    config.logInvalidProxy = (boolean) data.getOrDefault("log-invalid-proxy", true);
-                    config.logToSeparateFile = (boolean) data.getOrDefault("log-to-separate-file", false);
+                    config.logSuccessfulProxy = getBoolean(data, "log-successful-proxy", true);
+                    config.logInvalidProxy = getBoolean(data, "log-invalid-proxy", true);
+                    config.logToSeparateFile = getBoolean(data, "log-to-separate-file", false);
                 }
             }
         } else {
@@ -55,17 +58,30 @@ public class Config {
         return config;
     }
 
+    private static boolean getBoolean(Map<String, Object> data, String key, boolean defaultValue) {
+        Object val = data.get(key);
+        if (val instanceof Boolean) return (Boolean) val;
+        return defaultValue;
+    }
+
     public void save(Path path) throws IOException {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("log-successful-proxy", logSuccessfulProxy);
         data.put("log-invalid-proxy", logInvalidProxy);
         data.put("log-to-separate-file", logToSeparateFile);
 
-        Yaml yaml = new Yaml();
-        try (OutputStream out = Files.newOutputStream(path)) {
-            out.write("# HAProxyDetector Reloaded Configuration\n".getBytes());
-            out.write("# Whether to log successful proxy connections (IP restoration messages)\n".getBytes());
-            yaml.dump(data, new java.io.OutputStreamWriter(out));
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setIndent(2);
+        options.setPrettyFlow(true);
+        Yaml yaml = new Yaml(options);
+
+        try (OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(path), StandardCharsets.UTF_8)) {
+            writer.write("# HAProxyDetector Reloaded Configuration\n");
+            writer.write("# log-successful-proxy: Whether to log successful proxy connections (IP restoration messages)\n");
+            writer.write("# log-invalid-proxy: Whether to log connections from proxies not in the whitelist\n");
+            writer.write("# log-to-separate-file: Whether to log proxy information to proxy_connections.log instead of console\n");
+            yaml.dump(data, writer);
         }
     }
 
@@ -76,7 +92,6 @@ public class Config {
             mainLogger.log(level, message);
         }
     }
-
 
     public boolean isLogSuccessfulProxy() {
         return logSuccessfulProxy;
