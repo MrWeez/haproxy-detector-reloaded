@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
+import java.nio.file.Files;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -50,6 +51,7 @@ public final class VelocityMain {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws ReflectiveOperationException, IOException {
+        Files.createDirectories(this.dataDirectory);
         Config.load(this.dataDirectory.resolve("config.yml"));
 
         if (!isProxyEnabled()) {

@@ -21,6 +21,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -79,6 +80,7 @@ public final class BungeeMain extends Plugin implements Listener {
     @SuppressWarnings("unchecked")
     public void onEnable() {
         try {
+            this.getDataFolder().mkdirs();
             Path configPath = this.getDataFolder().toPath().resolve("config.yml");
             Config.load(configPath);
 

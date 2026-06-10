@@ -42,6 +42,10 @@ public class Config {
                 }
             }
         } else {
+            Path parent = path.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
             config.save(path);
         }
         
@@ -65,6 +69,10 @@ public class Config {
     }
 
     public void save(Path path) throws IOException {
+        Path parent = path.getParent();
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("log-successful-proxy", logSuccessfulProxy);
         data.put("log-invalid-proxy", logInvalidProxy);
