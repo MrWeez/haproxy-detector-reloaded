@@ -35,6 +35,7 @@ public final class BukkitMain extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            this.getDataFolder().mkdirs();
             Path configPath = this.getDataFolder().toPath().resolve("config.yml");
             Config.load(configPath);
 
